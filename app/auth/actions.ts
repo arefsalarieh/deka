@@ -1,5 +1,7 @@
 "use server";
+import { redirect } from "next/navigation";
 
+import { setCookie } from "cookies-next";
 import { z } from "zod";
 
 const schema = z.object({
@@ -23,6 +25,14 @@ export default async function login(formData: FormData) {
     };
   }
   else{
-    
+    try {
+      const res = await fetch("https://randomuser.me/api/?results=1&nat=us")
+      const data = await res.json()
+      await setCookie('user' , data)
+      redirect("/dashboard")
+    } catch (error) {
+      console.log(error)
+    }
+
   }
 }
